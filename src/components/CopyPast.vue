@@ -1,11 +1,13 @@
 <template>
   <div class="text-white text-base">
-    <img
-      src="https://www.arcgis.com/sharing/rest/content/items/5d40534d091540de826778706d00c04e/resources/1574707480127.jpeg?w=1600"
+    <!-- <img
+      src="@/assets/logo.svg"
       class="imgdoida m-auto mb-10"
-      title="Chupa CU"
-    />
+      title="Chupa Cabra"
+      alt="clipboard"
+    /> -->
 
+    <IconClipBoard/>
     <form
       submit.prevent
       class="flex items-center flex-col m-auto max-w-md mt-3"
@@ -31,19 +33,17 @@
       </button>
     </form>
 
-    <div
-      v-for="(link, index) in links"
-      :key="index"
-      class="mt-3"
-    >
+    <div v-for="(link, index) in links" :key="index" class="mt-3">
       <span :id="`i${index}`" class="fontepequna">{{ link.link }} </span>
 
-      <div class="flex flex items-center justify-center max-w-md m-auto text-center">
+      <div
+        class="flex flex items-center justify-center max-w-md m-auto text-center"
+      >
         <p>{{ link.name }}</p>
         <button
           :title="link.link"
           :data-clipboard-target="`#i${index}`"
-          class="btn p-1 rounded-sm ml-1"
+          class="clipboard p-1 rounded-sm ml-1"
         >
           <img src="@/assets/clippy.svg" width="20" height="20" />
         </button>
@@ -53,8 +53,9 @@
 </template>
 <script>
 import { defineComponent, ref, watchEffect } from "vue";
+import IconClipBoard from './Icons/IconClipboard'
 import Clipboard from "clipboard";
-new Clipboard(".btn");
+new Clipboard(".clipboard");
 
 const STORAGE_KEY = "links";
 const storage = {
@@ -67,6 +68,9 @@ const storage = {
   }
 };
 export default defineComponent({
+  components: {
+    IconClipBoard,
+  },
   setup() {
     let name = ref("");
     let link = ref("");
@@ -89,29 +93,12 @@ export default defineComponent({
       return links.value.splice(index, 1);
     }
 
-    function copy(index) {
-      console.log(index);
-      let copyText = document.getElementById(`${index}-inpt`);
-      copyText.select();
-      copyText.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-
-      let tooltip = document.getElementById("myTooltip");
-      tooltip.innerHTML = "Copied: " + copyText;
-    }
-
-    function outFunc() {
-      let tooltip = document.getElementById("myTooltip");
-      tooltip.innerHTML = "Copy to clipboard";
-    }
     return {
       link,
       name,
       addLink,
       links,
-      deleteLink,
-      copy,
-      outFunc
+      deleteLink
     };
   }
 });
