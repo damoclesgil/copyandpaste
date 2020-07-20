@@ -80,6 +80,13 @@ export default defineComponent({
       storage.save(links.value);
     });
 
+    /**
+
+      watch(() => {
+        links.value = storage.save(link.value, name.value)
+      })
+     */
+
     function addLink() {
       links.value.push({
         name: name.value,
